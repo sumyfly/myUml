@@ -1,0 +1,10 @@
+@startuml o1
+object user1 {
+  name = "foor"
+  id = 234
+}
+object user2 {
+  name = "bar"
+  id = 123
+}
+@enduml

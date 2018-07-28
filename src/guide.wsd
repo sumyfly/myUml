@@ -1,0 +1,24 @@
+' PlantUML is an Open Source project that allows to quickly write:
+' • Sequence diagram,
+' • Usecase diagram,
+' • Class diagram,
+' • Activity diagram,
+' • Component diagram,
+' • State diagram,
+' • Object diagram.
+' Diagrams are defined using a simple and intuitive language.
+
+@startuml macro1
+!define send(a,b,c) a->b : c
+send(Alice, Bob, Hello)
+send(Bob, Alice, ok)
+@enduml
+
+@startuml macro2
+!define DOUBLE(x) x x
+!definelong AUTHEN(x,y)
+x -> y : DOUBLE(hello)
+y -> x : ok
+!enddefinelong
+AUTHEN(Bob,Alice)
+@enduml

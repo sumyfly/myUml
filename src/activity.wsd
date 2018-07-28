@@ -1,0 +1,246 @@
+@startuml a1
+start
+if (graphviz installed?) then (yes)
+  :process all\ndiagrams;
+else (no)
+  :process only
+  __sequence__ and __activity__ diagrams;
+endif
+stop
+@enduml
+
+@startuml a2
+start
+if (condition A) then (yes)
+  :Text1;
+elseif (condition B) then (yes)
+  :Text2;
+  stop
+elseif (condition C) then (yes)
+  :Text 3;
+elseif (condition D) then (yes)
+  :Text 4;
+else (nothing)
+  :Text else;
+endif
+stop
+@enduml
+
+@startuml a3
+start
+:ClickServlet.handleRequest();
+:new page;
+if (Page.onSecurityCheck) then (true)
+  :(Page.onInit();
+  if (isForward?) then (no)
+    :Process controls;
+    if (continue processing?) then (no)
+      stop
+    endif
+
+    if (isPost?) then (yes)
+      :Page.onPost();
+    else (no)
+      :Page.onGet();
+    endif
+    :Page.onRender();
+  endif
+else (false)
+endif
+
+if (do redirect?) then (yes)
+  :redirect process;
+else
+  if (do forward?) then (yes)
+    :Forward request;
+  else (no)
+    :Render page template;
+  endif
+endif
+
+stop
+@enduml
+
+@startuml a4
+title 活动图
+start
+:开始;
+note left: 活动标签
+if (你是程序员吗？) then (我不是)
+  :我和你没有共同话题;
+else if (你会AI吗？) then (Yes)
+  :请帮我找2个大涨的股票;
+  repeat
+    fork
+      partition 线程一 {
+        :开始爬虫;
+        note left:并行处理
+        -[#green]->
+        :上传云计算;
+        -[#green]->
+        :大数据分析;
+      }
+
+    fork again
+      partition 线程二 {
+        :开始爬虫;
+        note right:并行处理
+        -[#green]->
+        :上传云计算;
+        -[#green]->
+        :大数据分析;
+      }
+    end fork
+  repeat while  (没有符合条件的股票)
+
+  #red:没有这样的股票;
+  if(继续深造?) then (No)
+    :我和你没有什么话说了;
+  else
+
+    if(有机器学习？) then(No)
+      :升级深度学习算法;
+    else (Yes)
+      :神经网络学习中...;
+      :语音识别|
+      :视觉识别>
+      :动作识别<
+      :while}
+    endif
+  endif
+else (No)
+  :我和你没有共同话题;
+endif
+stop
+@enduml
+
+@startuml a5
+(*) --> ===B1===
+--> "Parallel Activity 1"
+--> ===B2===
+===B1=== --> "Parallel Activity 2"
+--> ===B2===
+--> (*)
+@enduml
+
+@startuml a6
+(*) --> "Some Activity"
+note right: This activity has to be defined "Some Activity" --> (*)
+note left
+  This note is on
+  several lines
+end note
+--> (*)
+@enduml
+
+' particition
+@startuml a7
+partition Conductor {
+  (*) --> "Climbs on Platform"
+  --> === S1 ===
+  --> Bows
+}
+partition Audience #LightSkyBlue {
+  === S1 === --> Applauds
+}
+partition Conductor {
+  Bows --> === S2 ===
+  --> WavesArmes
+  Applauds --> === S2 ===
+}
+partition Orchestra #CCCCEE {
+  WavesArmes --> Introduction
+  --> "Play music"
+}
+@enduml
+
+@startuml a8
+start
+if (multiprocessor?) then (yes)
+  fork
+    :Treatment 1;
+  fork again
+    :Treatment 2;
+  fork again
+    :Treatment 3;
+  end fork
+else(monoproc)
+
+  :Treatment 1;
+  :Treatment 2;
+endif
+@enduml
+
+' arrows
+@startuml a9
+:foo1;
+-> You can put text on arrows;
+if (test) then
+  -[#blue]->
+  :foo2;
+  -[#green,dashed]-> The text can also be on several lines
+  and **very** long...;
+  :foo3;
+else
+  -[#black,dotted]->
+  :foo4;
+endif
+-[#gray,bold]->
+:foo5;
+@enduml
+
+' grouping
+@startuml a10
+start
+partition Initialization {
+  :read config file;
+  :init internal variable;
+}
+partition Running {
+  :wait for user interaction;
+  :print information;
+}
+partition Running {
+  :wait for user interaction;
+  :print information;
+}
+stop
+@enduml
+
+@startuml a11
+|Swimlane1|
+start
+:foo1;
+|#AntiqueWhite|Swimlane2|
+:foo2;
+:foo3;
+|Swimlane1|
+:foo4;
+|Swimlane2|
+:foo5;
+stop
+@enduml
+
+
+@startuml a12
+:Ready;
+:next(o)|
+:Receiving;
+split
+  :nak(i)< :ack(o)>
+split again
+  :ack(i)<
+  :next(o)
+  on several line|
+  :i := i + 1]
+  :ack(o)>
+split again
+  :err(i)< :nak(o)>
+split again
+  :foo/
+split again
+  :i > 5}
+  stop
+end split
+:finish;
+@enduml
