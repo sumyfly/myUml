@@ -13,7 +13,7 @@ V -up-> M :Query
 V -right-> C:Action
 C -left-> V :Update View
 C -up-> M: Update Model
-M -down-> V: Notify Changed
+M -down..> V: Notify Changed
 
 @enduml
 
