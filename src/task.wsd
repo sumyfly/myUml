@@ -1,0 +1,19 @@
+@startuml mvc
+rectangle V #GreenYellow[
+VIEW
+]
+rectangle M #RoyalBlue[
+MODEL
+]
+rectangle C #HotPink[
+CONTROLLER
+]
+
+V -up-> M :Query
+V -right-> C:Action
+C -left-> V :Update View
+C -up-> M: Update Model
+M -down-> V: Notify Changed
+
+@enduml
+

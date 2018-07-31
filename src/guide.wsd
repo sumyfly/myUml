@@ -22,3 +22,87 @@ y -> x : ok
 !enddefinelong
 AUTHEN(Bob,Alice)
 @enduml
+
+@startuml tab
+skinparam titleFontSize 14
+title
+Example of simple table
+|= |= table |= header |
+| a | table | row |
+| b | table | row |
+end title
+[*] --> State1
+@enduml
+
+@startuml tree
+skinparam titleFontSize 14
+title
+Example of Tree
+|_ First line
+|_ **Bom(Model)**
+|_ sub
+|_ prop1
+|_ prop2
+|_ prop3
+|_ Last line
+end title
+[*] --> State1
+@enduml
+
+@startuml icon
+title: <size:20><&heart>Use of OpenIconic<&heart></size> class Wifi
+note left
+  Click on <&wifi>
+end note
+@enduml
+
+
+@startuml listIcons
+listopeniconic
+@enduml
+
+@startuml gardients
+title Gradient
+
+skinparam defaultTextAlignment center
+skinparam RectangleFontSize 20
+
+skinparam TitleFontStyle bold
+skinparam TitleFontColor #e723e7
+
+' Define two colors for a gradient
+' and use - for left to right.
+skinparam BackgroundColor  #e2e2e2-#afafaf
+
+' Define two colors for a gradient
+' and use / for top left to bottom right.
+skinparam RectangleBackgroundColor #ffd200/#8cfcff
+
+rectangle A [
+From top left
+to bottom right
+<&fullscreen-enter>
+]
+
+' Use \ for bottom left to top right
+rectangle B #ffd200\8cfcff [
+From bottom left
+to top right
+<&resize-both>
+]
+
+' Use | for left to right
+rectangle C #ffd200|8cfcff [
+From left
+to right
+<&resize-width>
+]
+
+' Use | for top to bottom
+rectangle D #ffd200-8cfcff [
+From top
+to bottom
+<&resize-height>
+]
+
+@enduml

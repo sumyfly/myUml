@@ -10,7 +10,6 @@ be on several lines
 end note
 @enduml
 
-
 @startuml com2
 package "Some Group" {
   HTTP - [First Component]

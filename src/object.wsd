@@ -7,4 +7,5 @@ object user2 {
   name = "bar"
   id = 123
 }
+user1 -> user2
 @enduml
