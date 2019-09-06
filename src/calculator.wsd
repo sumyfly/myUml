@@ -1,0 +1,29 @@
+@startuml e5
+' promotion apply flow
+start
+
+:Add product;
+if (promotions contain Absolute or Percentage type?) then (true)
+  while (true)
+    #66FFCC:calculate();
+    #3399FF:applyPromotion();
+    if (any item has combo promotion? \n && has item level discount?) then (true)
+      #FF3300:delete its item level discount;
+    else (false)
+      #66FFCC:calculate();
+      stop
+    endif
+  endwhile
+  ' #66FFCC:calculate();
+
+else (false)
+  #3399FF:applyPromotion();
+  if (any item has combo promotion? && has item level discount?) then (true)
+    #FF3300:delete its item level discount;
+    #66FFCC:calculate();
+  endif
+  stop
+endif
+
+stop
+@enduml
