@@ -13,7 +13,7 @@ package "Data Model" #11AFAE {
 }
 
 package "Model Parser" #94FAFF {
-  package "Text Parser" #00FF00 {
+  package "Textbase Parser" #00FF00 {
 
     enum SHPrintCommandType {
       Text,
@@ -37,6 +37,22 @@ package "Model Parser" #94FAFF {
       String value
       List<PrintableUnit> unitValues
     }
+  }
+
+  package "Bitmap Parser" #00FF00 {
+    enum PrinterSizeType {
+      Printer58,
+      printer80,
+    }
+
+    ' temp class, will move logic into specific model parser.
+    class BitmapDrawParser {
+      + static Bitmap generateReceiptBitmap(TransactionModel mdel, PrinterSizeType printerSizeType)
+      + static Bitmap generateShiftReportBitmap(ShiftReportModel mdel, PrinterSizeType printerSizeType)
+      + static Bitmap generateKitchenTicketBitmap(KitchenTicketModel mdel, PrinterSizeType printerSizeType)
+    }
+
+    PrinterSizeType <-- BitmapDrawParser
   }
 
   abstract class AbstractModelParser{
@@ -120,8 +136,8 @@ package "Printer Declaration" #7F99B1 {
   ShiftReportModel <-- AbstractPrinter
   KitchenTicketModel <-- AbstractPrinter
 
-  interface PrinterParser {
-    + List<byte[]> generateCommandBytes(AbstractModelParser parser, PrintOutputType printOutputType)
+  interface IPrinterParser {
+    + List<byte[]> generateCommandBytes(AbstractModelParser parser)
   }
 
   class EPOSParser {
@@ -141,20 +157,7 @@ package "Printer Declaration" #7F99B1 {
   AbstractPrinter <|-- EpsonPrinter
   EpsonPrinter --> EPOSParser
 
-  enum PrinterSizeType {
-    Printer58,
-    printer80,
-  }
-
-  class BitmapDrawParser {
-    + static Bitmap generateReceiptBitmap(TransactionModel mdel, PrinterSizeType printerSizeType)
-    + static Bitmap generateShiftReportBitmap(ShiftReportModel mdel, PrinterSizeType printerSizeType)
-    + static Bitmap generateKitchenTicketBitmap(KitchenTicketModel mdel, PrinterSizeType printerSizeType)
-  }
-
-  PrinterSizeType <-- BitmapDrawParser
-
-  PrinterParser  <|-- EPOSParser
+  IPrinterParser  <|-- EPOSParser
 }
 
 class PrintManager {
