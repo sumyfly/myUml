@@ -13,6 +13,12 @@ package "Data Model" #F39C12 {
 }
 
 package "Model Parser" #94FAFF {
+
+  enum PrinterSizeType {
+    Printer58,
+    printer80,
+  }
+
   package "Textbase Parser" #11AFAE {
 
     enum SHPrintCommandType {
@@ -37,13 +43,11 @@ package "Model Parser" #94FAFF {
       String value
       List<PrintableUnit> unitValues
     }
+
+    PrintableUnit -> SHPrintCommandType
   }
 
   package "Bitmap Parser" #11AFAE {
-    enum PrinterSizeType {
-      Printer58,
-      printer80,
-    }
 
     ' temp class, will move logic into specific model parser.
     class BitmapDrawParser {
@@ -52,16 +56,16 @@ package "Model Parser" #94FAFF {
       + static Bitmap generateKitchenTicketBitmap(KitchenTicketModel mdel, PrinterSizeType printerSizeType)
     }
 
-    PrinterSizeType <-- BitmapDrawParser
   }
 
   abstract class AbstractModelParser{
+    .. Private ..
+    - PrinterSizeType printerSizeType
+
     .. Public ..
     + List<PrintableUnit> getPrintableUnitList
     + Bitmap getPrintableBitmap
   }
-
-  SHPrintCommandType <- PrintableUnit
 
   class TransactionModelParser {
   }
@@ -72,8 +76,9 @@ package "Model Parser" #94FAFF {
   class KitchenTicketModelParser {
   }
 
+  BitmapDrawParser <-- AbstractModelParser
   PrintableUnit <-- AbstractModelParser
-  BitmapDrawParser <- AbstractModelParser
+  PrinterSizeType <- AbstractModelParser
 
   AbstractModelParser <|-- TransactionModelParser
   TransactionModelParser --> TransactionModel
