@@ -121,7 +121,7 @@ package "Printer Declaration" #7F99B1 {
   KitchenTicketModel <-- AbstractPrinter
 
   interface PrinterParser {
-    + List<byte[]> generateCommandBytes(AbstractModelParser parser)
+    + List<byte[]> generateCommandBytes(AbstractModelParser parser, PrintOutputType printOutputType)
   }
 
   class EPOSParser {
