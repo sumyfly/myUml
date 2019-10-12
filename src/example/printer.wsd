@@ -97,7 +97,7 @@ package "Printer Declaration" #7F99B1 {
     Bluetooth,
   }
 
-  enum PrintOutputType {
+  enum PrinterOutputType {
     TextBase,
     Bitmap,
   }
@@ -113,7 +113,7 @@ package "Printer Declaration" #7F99B1 {
 
   abstract class AbstractPrinter{
     .. Private ..
-    - PrintOutputType printOutputType
+    - PrinterOutputType printerOutputType
     - PrinterSizeType printerSizeType
     - Boolean isReceiptPrinter
     - List<String> printerTags
