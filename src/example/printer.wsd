@@ -1,43 +1,6 @@
 @startuml printer
 
-package "Model Declaration" #DDDDDD {
-
-  enum SHPrintCommandType {
-    Text,
-    Icon,
-    Center,
-    AlignLeft,
-    AlignCenter,
-    Bold,
-    CancelBold,
-    _2XHeight,
-    Cancel2XHeight,
-    SetHorizontalTab,
-    SetHorizontalTabSummary,
-    Separator,
-    Items,
-    EndItems,
-  }
-
-  class PrintableUnit {
-    SHPrintCommandType command
-    String value
-    List<PrintableUnit> unitValues
-  }
-
-   class PrintableModel{
-    List<PrintableUnit> printableUnitList
-  }
-
-  SHPrintCommandType <- PrintableUnit
-  PrintableUnit <- PrintableModel
-
-  interface IPrintable {
-    + PrintableModel transformPrintableModel()
-  }
-
-  PrintableModel <- IPrintable
-
+package "Data Model" #11AFAE {
   class TransactionModel {
   }
 
@@ -47,26 +10,65 @@ package "Model Declaration" #DDDDDD {
   class KitchenTicketModel {
   }
 
-  IPrintable <|-- TransactionModel
-  IPrintable <|-- ShiftReportModel
-  IPrintable <|-- KitchenTicketModel
 }
 
+package "Model Parser" #94FAFF {
+  package "Text Parser" #00FF00 {
 
+    enum SHPrintCommandType {
+      Text,
+      Icon,
+      Center,
+      AlignLeft,
+      AlignCenter,
+      Bold,
+      CancelBold,
+      _2XHeight,
+      Cancel2XHeight,
+      SetHorizontalTab,
+      SetHorizontalTabSummary,
+      Separator,
+      Items,
+      EndItems,
+    }
 
-class PrintManager {
-  .. Public ..
-  + List<AbstractPrinter> search()
-  + printReceipt(TransactionModel model)
-  + printShiftReport(ShiftModel model)
-  + printKitchenTicket(KitchenTicketModel model, List<String> printerTags)
-  + openDrawer()
+    class PrintableUnit {
+      SHPrintCommandType command
+      String value
+      List<PrintableUnit> unitValues
+    }
+  }
 
-  .. Private ..
-  - List<AbstractPrinter> printerList
+  abstract class AbstractModelParser{
+    .. Public ..
+    + List<PrintableUnit> getPrintableUnitList
+    + Bitmap getPrintableBitmap
+  }
+
+  SHPrintCommandType <- PrintableUnit
+
+  class TransactionModelParser {
+  }
+
+  class ShiftReportModelParser {
+  }
+
+  class KitchenTicketModelParser {
+  }
+
+  PrintableUnit <-- AbstractModelParser
+
+  AbstractModelParser <|-- TransactionModelParser
+  TransactionModelParser --> TransactionModel
+
+  AbstractModelParser <|-- ShiftReportModelParser
+  ShiftReportModelParser --> ShiftReportModel
+
+  AbstractModelParser <|-- KitchenTicketModelParser
+  KitchenTicketModelParser --> KitchenTicketModel
 }
 
-package "Printer Declaration" #DDDDDD {
+package "Printer Declaration" #7F99B1 {
   enum PrinterConnectType{
     USB,
     Ethernet,
@@ -78,17 +80,19 @@ package "Printer Declaration" #DDDDDD {
     Bitmap,
   }
 
-  abstract class AbstractPrinter{
-    .. Public ..
-    + printSampleReceipt()
-    + printReceipt(TransactionModel model)
-    + printShiftReport(ShiftReportModel model)
-    + printKitchenTicket(KitchenTicketModel model)
-    + openDrawer()
-    + buzz()
+  abstract class AbstraceConnection {
+    + connect()
+    + disconnect()
+    + write(byte[] data)
+    + read(byte[] buffer)
+    + sendData(List<byte[]> data)
+    + receiveData(data)
+  }
 
+  abstract class AbstractPrinter{
     .. Private ..
     - PrintOutputType printOutputType
+    - PrinterSizeType printerSizeType
     - Boolean isReceiptPrinter
     - List<String> printerTags
     - PrinterConnectType connectType
@@ -97,30 +101,45 @@ package "Printer Declaration" #DDDDDD {
     - String bluetoothAddress
     - String usbPort
     - Boolean isConnected
-  }
+    - AbstractConnection connection
 
-  interface IParsePrintableUnit{
-    + parsePrintableUnit(PrintableUnit printableUnit)
+    .. Public ..
+    + printSampleReceipt()
+    + printReceipt(TransactionModel model)
+    + printShiftReport(ShiftReportModel model)
+    + printKitchenTicket(KitchenTicketModel model)
+    + openDrawer()
+    + buzz()
   }
 
   PrintOutputType <- AbstractPrinter
+  AbstraceConnection <- AbstractPrinter
   AbstractPrinter -> PrinterConnectType
+
   TransactionModel <-- AbstractPrinter
   ShiftReportModel <-- AbstractPrinter
   KitchenTicketModel <-- AbstractPrinter
 
+  interface PrinterParser {
+    + List<byte[]> generateCommandBytes(AbstractModelParser parser)
+  }
+
+  class EPOSParser {
+  }
+
   class XPrinter {
-    + connect()
-    + disconnect()
+    EPOSParser eposParser
   }
 
   class EpsonPrinter {
-    + connect()
-    + disconnect()
+    EPOSParser eposParser
   }
 
   AbstractPrinter <|-- XPrinter
+  XPrinter --> EPOSParser
+
   AbstractPrinter <|-- EpsonPrinter
+  EpsonPrinter --> EPOSParser
 
   enum PrinterSizeType {
     Printer58,
@@ -135,13 +154,21 @@ package "Printer Declaration" #DDDDDD {
 
   PrinterSizeType <-- BitmapDrawParser
 
-  class EPOSParser {
-    + List<byte[]> generateCommandBytes(PrintableModel model)
-  }
-  IParsePrintableUnit  <|-- EPOSParser
-
+  PrinterParser  <|-- EPOSParser
 }
 
-PrintManager -> AbstractPrinter
+class PrintManager {
+  .. Public ..
+  + List<AbstractPrinter> search()
+  + printReceipt(TransactionModel model)
+  + printShiftReport(ShiftReportModel model)
+  + printKitchenTicket(KitchenTicketModel model, List<String> printerTags)
+  + openDrawer()
+
+  .. Private ..
+  - List<AbstractPrinter> printerList
+}
+
+AbstractPrinter <-- PrintManager
 
 @enduml
