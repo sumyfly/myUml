@@ -134,9 +134,19 @@ package "Printer Declaration" #7F99B1 {
     + buzz()
   }
 
-  PrintOutputType <- AbstractPrinter
+  class BluetoothConnection{
+  }
+  class EthernetConnection{
+  }
+  class UsbConnection{
+  }
+
+
   AbstraceConnection <- AbstractPrinter
-  AbstractPrinter -> PrinterConnectType
+  AbstraceConnection <|-- BluetoothConnection
+  AbstraceConnection <|-- EthernetConnection
+  AbstraceConnection <|-- UsbConnection
+
 
   TransactionModel <-- AbstractPrinter
   ShiftReportModel <-- AbstractPrinter
